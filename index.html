@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>سیستەمی هەنگوین</title>
+<style>
+@font-face{font-family:'Vazirmatn';src:url('vazirmatn.woff2') format('woff2');font-weight:100 900;font-display:swap}
+:root{--bg:#0b1220;--panel:#131c2e;--panel2:#1b2740;--line:#2a3956;--txt:#f1f5f9;--mut:#94a3b8;--amber:#f59e0b;--amber2:#fbbf24;--green:#34d399;--red:#fb7185;--blue:#38bdf8;--purple:#c084fc}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--txt);font-family:'Vazirmatn',Tahoma,'Noto Naskh Arabic',system-ui,sans-serif;font-size:15px;line-height:1.55}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+#app{max-width:720px;margin:0 auto;min-height:100vh}
+header{position:sticky;top:0;z-index:5;background:#0f172a;border-bottom:1px solid rgba(245,158,11,.25);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top))}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#d97706,#fcd34d);display:grid;place-items:center;font-size:20px;flex:none}
+header h1{margin:0;font-size:17px;color:var(--amber2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iconbtn{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);font-size:19px}
+main{padding:14px 14px calc(88px + env(safe-area-inset-bottom))}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:720px;z-index:6;display:flex;background:#0f172a;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;border:0;background:none;padding:8px 1px 7px;font-size:11px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:1px}
+nav button i{font-style:normal;font-size:21px}
+nav button.on{color:var(--amber2);font-weight:700}
+h2{margin:0 0 4px;font-size:20px}
+h3{margin:0 0 10px;font-size:15px;color:var(--amber2)}
+.sub{color:var(--mut);font-size:13px;margin:0 0 12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--amber);border-radius:14px;padding:11px 12px}
+.stat small{display:block;color:var(--mut);font-size:12px}
+.stat b{display:block;font-size:17px;margin-top:2px;word-break:break-word}
+.stat em{display:block;font-style:normal;color:var(--mut);font-size:11px;margin-top:2px}
+.c-red{border-top-color:var(--red)}.c-green{border-top-color:var(--green)}.c-blue{border-top-color:var(--blue)}.c-purple{border-top-color:var(--purple)}
+.red{color:var(--red)}.green{color:var(--green)}.amber{color:var(--amber2)}.blue{color:var(--blue)}.mut{color:var(--mut)}
+label{display:block;font-size:13px;color:#cbd5e1;margin:12px 0 5px;font-weight:600}
+input,select,textarea{width:100%;padding:12px;background:#0b1220;border:1px solid var(--line);border-radius:12px;font-size:16px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--amber)}
+.num{direction:ltr;text-align:end}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.btn{border:0;border-radius:12px;padding:13px 16px;min-height:48px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#1c1002;font-weight:800;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn.block{display:flex;width:100%}
+.btn.ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--line);font-weight:600}
+.btn.danger{background:#2a1218;color:var(--red);border:1px solid #7f1d2d;font-weight:600}
+.btn.sm{min-height:38px;padding:7px 12px;font-size:13px;border-radius:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:7px 14px;font-size:14px}
+.chip:active{background:#33466b}
+.totbox{background:#0b1220;border:1px solid rgba(245,158,11,.4);border-radius:14px;padding:12px;margin-top:14px}
+.totbox div{display:flex;justify-content:space-between;align-items:center}
+.totbox .big{font-size:22px;font-weight:800;color:var(--amber2)}
+.hint{font-size:12.5px;color:var(--mut);margin-top:5px}
+.banner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;border-radius:14px;margin-bottom:12px;font-size:13.5px}
+.banner.warn{background:#3a2a07;border:1px solid #8a6414;color:#fde68a}
+.banner.bad{background:#3b121c;border:1px solid #9f1239;color:#fecdd3}
+.seg{display:flex;gap:6px;margin-bottom:12px}
+.seg button{flex:1;padding:10px 4px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--mut)}
+.seg button.on{background:var(--amber);border-color:var(--amber);color:#1c1002;font-weight:800}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;background:var(--panel2);border:1px solid var(--line);color:#cbd5e1}
+.badge.paid{background:#06281e;border-color:#0f7a55;color:var(--green)}
+.badge.part{background:#33270a;border-color:#8a6414;color:var(--amber2)}
+.badge.debt{background:#3b121c;border-color:#9f1239;color:var(--red)}
+.item{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.item b{font-size:15.5px}
+.line{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.line:last-child{border-bottom:0}
+.acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.bar{height:9px;background:#0b1220;border-radius:99px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#d97706,#fbbf24);border-radius:99px}
+.chart{width:100%;height:auto;direction:ltr}
+.empty{text-align:center;color:var(--mut);padding:26px 10px}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:30}
+#modal.open{display:flex}
+.sheet{background:var(--panel);width:100%;max-width:720px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(86px + env(safe-area-inset-bottom));background:#fde68a;color:#1c1002;padding:10px 18px;border-radius:999px;z-index:40;display:none;max-width:92%;text-align:center;font-weight:700}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="brand"><div class="logo">🍯</div><h1 id="title">پڕۆژەی هەنگوین</h1></div>
+    <div style="display:flex;gap:8px"><button class="iconbtn" id="syncBtn" data-act="syncbtn" aria-label="sync" style="opacity:.45">☁️</button><button class="iconbtn" data-act="tab" data-tab="set" aria-label="ڕێکخستن">⚙️</button></div>
+  </header>
+  <main id="main"></main>
+</div>
+<nav id="nav">
+  <button data-act="tab" data-tab="dash"><i>📊</i><span>داشبۆرد</span></button>
+  <button data-act="tab" data-tab="sale"><i>🛒</i><span>فرۆشتن</span></button>
+  <button data-act="tab" data-tab="pre"><i>📝</i><span id="navPreLbl">پێشوەختە</span></button>
+  <button data-act="tab" data-tab="hist"><i>🧾</i><span>مێژوو</span></button>
+  <button data-act="tab" data-tab="stock"><i>📦</i><span>کۆگا</span></button>
+  <button data-act="tab" data-tab="cust"><i>👥</i><span>کڕیاران</span></button>
+</nav>
+<div id="modal"><div class="sheet" id="sheet"></div></div>
+<div id="toast"></div>
+
+<script>
+'use strict';
+/* ================= constants ================= */
+const CATS={doctor:'پزیشک',staff:'کارمەند و لێپرسراو',friends:'خزم و دۆست و هاوڕێ',general:'کڕیاری گشتی'};
+const METHODS={cash:'کاش',zain:'زەین کاش',fast:'فەستپەی'};
+
+/* ================= storage ================= */
+function idb(){return new Promise((res,rej)=>{const r=indexedDB.open('honeyerp',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+async function idbGet(k){const db=await idb();return new Promise((res,rej)=>{const q=db.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});}
+async function idbSet(k,v){const db=await idb();return new Promise((res,rej)=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=()=>res();t.onerror=()=>rej(t.error);});}
+const defaults=()=>({v:3,batches:[],sales:[],customers:[],payments:[],tomb:[],preorders:[],sync:{since:0,sent:{}},settings:{low:5,defPrice:40000,lastBackup:0,lastChange:0}});
+let S,D,tab='dash',period='month',hist={q:'',cat:'ALL',st:'ALL'},custQ='';
+
+function normalize(d){
+  const x=Object.assign(defaults(),d||{});
+  ['batches','sales','customers','payments','tomb','preorders'].forEach(k=>{if(!Array.isArray(x[k]))x[k]=[];});
+  x.sync=Object.assign({since:0,sent:{}},x.sync||{});
+  if(!x.sync.sent||typeof x.sync.sent!=='object')x.sync.sent={};
+  x.settings=Object.assign(defaults().settings,x.settings||{});
+  return x;
+}
+async function load(){
+  let d=null;
+  try{d=await idbGet('state');}catch(e){}
+  if(!d){try{const raw=localStorage.getItem('honeyerp_state');if(raw)d=JSON.parse(raw);}catch(e){}}
+  S=normalize(d);
+}
+async function save(touch=true,sync=true){
+  if(touch)S.settings.lastChange=Date.now();
+  try{await idbSet('state',S);}
+  catch(e){try{localStorage.setItem('honeyerp_state',JSON.stringify(S));}catch(_){toast('هەڵە لە پاشەکەوتکردن');}}
+  if(sync)scheduleSync();
+}
+
+/* ================= helpers ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf0=new Intl.NumberFormat('en-US',{maximumFractionDigits:0});
+const nf3=new Intl.NumberFormat('en-US',{maximumFractionDigits:3});
+const money=n=>nf0.format(Math.round(n||0))+' ع.د';
+const kg=n=>'⁦'+nf3.format(r3(n||0))+' kg⁩';
+const r3=x=>Math.round(x*1000)/1000;
+const r2=x=>Math.round(x*100)/100;
+const sum=(a,f)=>a.reduce((s,x)=>s+f(x),0);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const num=v=>{v=String(v==null?'':v).replace(/[٠-٩]/g,d=>d.charCodeAt(0)-1632).replace(/[۰-۹]/g,d=>d.charCodeAt(0)-1776).replace(/[٬,،]/g,'').replace(/٫/g,'.').replace(/[^\d.\-]/g,'');const n=parseFloat(v);return isNaN(n)?0:n;};
+const z2=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+z2(d.getMonth()+1)+'-'+z2(d.getDate());
+const today=()=>ymd(new Date());
+const timeOf=ts=>new Date(ts).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+const daysAgo=d=>Math.floor((Date.now()-new Date(d+'T00:00:00').getTime())/864e5);
+let toastTimer;
+function toast(m){const el=$('#toast');el.textContent=m;el.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display='none',2400);}
+function openModal(h){$('#sheet').innerHTML=h;$('#modal').classList.add('open');}
+function closeModal(){$('#modal').classList.remove('open');$('#sheet').innerHTML='';}
+const stockTotal=()=>r3(sum(S.batches,b=>b.remaining));
+const custOf=id=>S.customers.find(c=>c.id===id);
+const bal=id=>D.bal[id]||0;
+const info=id=>D.info[id]||{kg:0,spent:0,last:'',notes:[]};
+const catName=k=>CATS[k]||k||'';
+
+/* Debts: payments of a customer are applied to the oldest unpaid sales first. */
+function derive(){
+  const byC={};D={om:{},bal:{},info:{},over:false};
+  // Stock is always computed from batches minus sales, so devices can never disagree about it.
+  const used={};S.sales.forEach(s=>(s.alloc||[]).forEach(a=>{used[a.bid]=(used[a.bid]||0)+a.kg;}));
+  S.batches.forEach(b=>{const r=r3(b.qty-(used[b.id]||0));if(r<-1e-9)D.over=true;b.remaining=Math.max(0,r);});
+  S.sales.forEach(s=>{(byC[s.custId]=byC[s.custId]||[]).push(s);});
+  for(const cid in byC){
+    let P=sum(S.payments.filter(p=>p.custId===cid),p=>p.amount),owed=0,kgs=0,spent=0,last='',notes=[];
+    byC[cid].slice().sort((x,y)=>x.ts-y.ts).forEach(s=>{
+      const rem=Math.max(0,s.total-s.paid),use=Math.min(P,rem);P-=use;
+      D.om[s.id]=r2(rem-use);owed+=D.om[s.id];kgs+=s.qty;spent+=s.total;
+      if(s.date>last)last=s.date;
+      if(s.notes)notes.push(s.notes);
+    });
+    D.bal[cid]=r2(owed);D.info[cid]={kg:r3(kgs),spent,last,notes};
+  }
+}
+const saleOwed=s=>D.om[s.id]||0;
+function saleStatus(s){
+  const o=saleOwed(s);
+  if(o<=0.5)return ['دراوە','paid'];
+  return [o>=s.total-0.5?'قەرز':'بەشێکی ماوە',o>=s.total-0.5?'debt':'part'];
+}
+function inRange(x){
+  const d=x.date;
+  if(period==='today')return d===today();
+  if(period==='month')return d.slice(0,7)===today().slice(0,7);
+  return true;
+}
+const batchesFifo=()=>S.batches.slice().sort((a,b)=>(a.date||'')<(b.date||'')?-1:(a.date||'')>(b.date||'')?1:(a.id<b.id?-1:1));
+const firstBatch=()=>batchesFifo().find(b=>b.remaining>0);
+const defPrice=()=>{const b=firstBatch();return b&&b.sell?b.sell:S.settings.defPrice;};
+
+/* ================= views ================= */
+function banners(){
+  let h='';
+  const s=S.settings;
+  if(D.over)h+=`<div class="banner bad"><span>⚠️ هەمان هەنگوین لە دوو ئامێرەوە پێکەوە فرۆشراوە و فرۆشتن لە کۆگا زیاترە. وەجبەکان بپشکنە.</span></div>`;
+  if(S.batches.length&&stockTotal()<=s.low)
+    h+=`<div class="banner bad"><span>⚠️ هەنگوینی کۆگا کەم بووەتەوە: ${kg(stockTotal())}</span><button class="btn sm" data-act="tab" data-tab="stock">زیادکردن</button></div>`;
+  if(S.sales.length&&s.lastChange>s.lastBackup&&Date.now()-s.lastBackup>864e5)
+    h+=`<div class="banner warn"><span>ئەمڕۆ backup نەگیراوە. بۆ ئەوەی داتاکان نەفەوتێن، هەناردەی بکە.</span><button class="btn sm" data-act="export">backup</button></div>`;
+  return h;
+}
+
+function barsSVG(dates,vals){
+  const W=300,H=100,n=vals.length,max=Math.max(1,...vals),bw=W/n;
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H+18}" role="img" aria-label="فرۆشتنی ڕۆژانە">`;
+  s+=`<line x1="0" y1="${H}" x2="${W}" y2="${H}" stroke="#2a3956"/>`;
+  vals.forEach((v,i)=>{
+    const h=Math.round(v/max*(H-6));
+    s+=`<rect x="${(i*bw+3).toFixed(1)}" y="${H-h}" width="${(bw-6).toFixed(1)}" height="${v>0?Math.max(h,2):0}" rx="3" fill="#f59e0b"><title>${dates[i]}: ${nf0.format(v)}</title></rect>`;
+  });
+  s+=`<text x="2" y="${H+13}" font-size="9" fill="#94a3b8">${dates[0].slice(5)}</text><text x="${W-2}" y="${H+13}" font-size="9" fill="#94a3b8" text-anchor="end">${dates[n-1].slice(5)}</text>`;
+  return s+`</svg>`;
+}
+
+function viewDash(){
+  const ss=S.sales.filter(inRange),ps=S.payments.filter(inRange);
+  const rev=sum(ss,s=>s.total),cost=sum(ss,s=>s.cogs||0),profit=rev-cost,sold=sum(ss,s=>s.qty);
+  const col=sum(ss,s=>s.paid)+sum(ps,p=>p.amount);
+  const debts=sum(Object.values(D.bal),x=>x);
+  const stockVal=sum(S.batches,b=>b.remaining*b.cost);
+  const seg=[['today','ئەمڕۆ'],['month','ئەم مانگە'],['all','هەموو کات']].map(([k,l])=>`<button class="${period===k?'on':''}" data-act="period" data-p="${k}">${l}</button>`).join('');
+  // last 14 days chart
+  const dates=[],vals=[];
+  for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=ymd(d);dates.push(k);vals.push(sum(S.sales.filter(s=>s.date===k),s=>s.total));}
+  // categories
+  const cat={};ss.forEach(s=>{cat[s.category]=(cat[s.category]||0)+s.qty;});
+  const catMax=Math.max(0,...Object.values(cat));
+  const catHtml=Object.keys(cat).length?Object.entries(cat).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div style="margin-bottom:10px"><div class="item"><span>${esc(catName(k))}</span><b>${kg(v)}</b></div><div class="bar"><i style="width:${Math.round(v/catMax*100)}%"></i></div></div>`).join(''):`<div class="empty">هیچ فرۆشتنێک لەم ماوەیەدا نییە</div>`;
+  // debtors / inactive
+  const debtors=S.customers.filter(c=>bal(c.id)>0.5).sort((a,b)=>bal(b.id)-bal(a.id)).slice(0,5);
+  const inactive=S.customers.filter(c=>info(c.id).last&&daysAgo(info(c.id).last)>=30).sort((a,b)=>info(a.id).last<info(b.id).last?-1:1).slice(0,5);
+  return `<h2>داشبۆردی سەرەکی</h2><p class="sub">کورتەی دارایی، کۆگا و فرۆشتنەکان</p>
+  <div class="seg">${seg}</div>
+  <div class="grid2">
+    <div class="stat"><small>فرۆشتن (داهات)</small><b class="amber">${money(rev)}</b><em>${ss.length} فرۆشتن</em></div>
+    <div class="stat c-red"><small>تێچووی هەنگوینی فرۆشراو</small><b class="red">${money(cost)}</b><em>بە تێچووی ڕاستەقینەی وەجبەکان</em></div>
+    <div class="stat c-green"><small>قازانجی پاک</small><b class="green">${money(profit)}</b><em>${rev>0?Math.round(profit/rev*100)+'% قازانج':'—'}</em></div>
+    <div class="stat c-green"><small>پارەی وەرگیراو</small><b>${money(col)}</b><em>فرۆشتنی کاش + پارەدانەوەی قەرز</em></div>
+    <div class="stat c-red"><small>قەرزی ماوە (کۆی گشتی)</small><b class="${debts>0.5?'red':''}">${money(debts)}</b><em>${S.customers.filter(c=>bal(c.id)>0.5).length} کڕیار قەرزارن</em></div>
+    <div class="stat c-blue"><small>هەنگوینی فرۆشراو</small><b class="blue">${kg(sold)}</b></div>
+    <div class="stat c-purple"><small>کۆگای بەردەست</small><b>${kg(stockTotal())}</b></div>
+    <div class="stat c-purple"><small>نرخی کۆگا (بە تێچوو)</small><b>${money(stockVal)}</b></div>
+  </div>
+  ${preDashCard()}
+  <div class="card" style="margin-top:12px"><h3>فرۆشتنی ١٤ ڕۆژی دوایی</h3>${barsSVG(dates,vals)}</div>
+  <div class="card"><h3>فرۆشتن بەپێی جۆری کڕیار</h3>${catHtml}</div>
+  ${debtors.length?`<div class="card"><h3>کڕیارە قەرزارەکان</h3>${debtors.map(c=>`<div class="line"><button class="chip" data-act="cust" data-id="${c.id}">${esc(c.name)}</button><b class="red">${money(bal(c.id))}</b></div>`).join('')}</div>`:''}
+  ${inactive.length?`<div class="card"><h3>کڕیارانێک بۆ ٣٠ ڕۆژ یان زیاتر نەکڕیوە</h3>${inactive.map(c=>`<div class="line"><button class="chip" data-act="cust" data-id="${c.id}">${esc(c.name)}</button><span class="mut">${daysAgo(info(c.id).last)} ڕۆژ</span></div>`).join('')}</div>`:''}
+  <button class="btn block" data-act="tab" data-tab="sale">➕ فرۆشتنی نوێ</button>`;
+}
+
+function viewSale(){
+  const st=stockTotal();
+  const names=S.customers.map(c=>`<option value="${esc(c.name)}">`).join('');
+  return `<h2>تۆمارکردنی فرۆشتنی نوێ</h2><p class="sub">کۆگای ئێستا: <b id="sStock" class="${st<=S.settings.low?'red':'green'}">${kg(st)}</b></p>
+  ${S.batches.length?'':`<div class="banner bad"><span>هێشتا هیچ هەنگوینێکت لە کۆگا نییە. سەرەتا وەجبەیەک زیاد بکە.</span><button class="btn sm" data-act="tab" data-tab="stock">کۆگا</button></div>`}
+  <form id="saleForm" class="card" autocomplete="off">
+    <label>ناوی کڕیار *</label>
+    <input id="sName" list="custlist" required placeholder="م. کاروان / دکتۆر بەرزان"><datalist id="custlist">${names}</datalist>
+    <div class="hint" id="sNameHint"></div>
+    <div class="row">
+      <div><label>ژمارەی مۆبایل</label><input id="sPhone" class="num" inputmode="tel" placeholder="0750XXXXXXX"></div>
+      <div><label>جۆری کڕیار</label><select id="sCat">${Object.entries(CATS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+    </div>
+    <label>بڕ (کیلۆگرام) *</label>
+    <input id="sQty" class="num" inputmode="decimal" placeholder="1">
+    <div class="chips">${[0.5,1,2,3,5].map(v=>`<button type="button" class="chip" data-act="qty" data-v="${v}">⁦${v} kg⁩</button>`).join('')}</div>
+    <label>نرخی ١ کیلۆ (دینار) *</label>
+    <input id="sPrice" class="num" inputmode="numeric">
+    <div class="hint" id="sHint"></div>
+    <div class="totbox">
+      <div><span>کۆی گشتی</span><span class="big" id="sTotal">0 ع.د</span></div>
+    </div>
+    <label>ئێستا چەندی دا؟ <span class="mut" style="font-weight:400">(بەتاڵ = هەمووی)</span></label>
+    <input id="sPaid" class="num" inputmode="numeric">
+    <div class="chips"><button type="button" class="chip" data-act="paidall">هەمووی دراوە</button><button type="button" class="chip" data-act="paidnone">هیچ نەدراوە (قەرز)</button></div>
+    <div class="totbox"><div><span>قەرزی ماوە</span><b id="sOwed">0 ع.د</b></div></div>
+    <label>شێوازی پارەدان</label>
+    <select id="sMethod">${Object.entries(METHODS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select>
+    <label>تێبینی یان فیدباک</label>
+    <textarea id="sNotes" rows="2" placeholder="بۆ نموونە: تامی هەنگوینەکەی بەدڵ بوو..."></textarea>
+    <button type="submit" class="btn block" style="margin-top:16px">✅ تۆمارکردنی فرۆشتن</button>
+  </form>`;
+}
+function saleUpd(){
+  const qty=num($('#sQty').value),price=num($('#sPrice').value),total=Math.round(qty*price);
+  const raw=$('#sPaid').value.trim();
+  const paid=raw===''?total:Math.min(Math.max(num(raw),0),total);
+  $('#sTotal').textContent=money(total);
+  $('#sPaid').placeholder=nf0.format(total);
+  const o=total-paid,oe=$('#sOwed');oe.textContent=money(o);oe.className=o>0.5?'red':'green';
+  const b=firstBatch();let h='';
+  if(b){h=`لە وەجبەی «${esc(b.name)}» · تێچووی ١ کیلۆ: ${money(b.cost)}`;if(price>0&&price<b.cost)h+=` <b class="red">⚠️ نرخەکە لە تێچوو کەمترە</b>`;}
+  if(qty>stockTotal()+1e-9)h+=` <b class="red">⚠️ کۆگا تەنها ${kg(stockTotal())}ـە</b> <button type="button" class="chip" data-act="topre">📝 تۆمارکردن وەک پێشوەختە</button>`;
+  $('#sHint').innerHTML=h;
+}
+function saleNameHint(){
+  const nm=$('#sName').value.trim().toLowerCase(),c=S.customers.find(x=>x.name.trim().toLowerCase()===nm);
+  const el=$('#sNameHint');
+  if(!c){el.innerHTML='';return;}
+  if(!$('#sPhone').value)$('#sPhone').value=c.phone||'';
+  $('#sCat').value=c.category||'general';
+  const b=bal(c.id);
+  el.innerHTML=`کڕیاری ناسراو · کۆی کڕین ${kg(info(c.id).kg)}`+(b>0.5?` · <b class="red">قەرزی ماوە ${money(b)}</b>`:'');
+}
+function submitSale(){
+  const name=$('#sName').value.trim();
+  if(!name)return toast('ناوی کڕیار بنووسە');
+  const qty=r3(num($('#sQty').value)),price=num($('#sPrice').value);
+  if(qty<=0)return toast('بڕی کیلۆ بنووسە');
+  if(price<=0)return toast('نرخی کیلۆ بنووسە');
+  if(qty>stockTotal()+1e-9)return toast('کۆگا بەس نییە: تەنها '+kg(stockTotal()));
+  const total=Math.round(qty*price),raw=$('#sPaid').value.trim();
+  const paid=raw===''?total:Math.min(Math.max(num(raw),0),total);
+  const phone=$('#sPhone').value.trim(),category=$('#sCat').value;
+  const c=ensureCustomer(name,phone,category);
+  const alloc=allocate(qty);
+  pushSale(c,qty,price,paid,$('#sMethod').value,$('#sNotes').value.trim(),category,alloc);
+  save();render();
+  toast(paid<total?'تۆمارکرا · قەرز: '+money(total-paid):'فرۆشتنەکە تۆمارکرا');
+}
+
+/* ================= shared sale helpers ================= */
+function ensureCustomer(name,phone,category){
+  let c=S.customers.find(x=>x.name.trim().toLowerCase()===name.toLowerCase());
+  if(c){let ch=false;if(phone&&c.phone!==phone){c.phone=phone;ch=true;}if(category&&c.category!==category){c.category=category;ch=true;}if(ch)c.u=Date.now();}
+  else{c={id:uid(),name,phone:phone||'',category:category||'general',u:Date.now()};S.customers.push(c);}
+  return c;
+}
+/* FIFO from batches (or one chosen batch), remembering the real cost of every kg sold */
+function allocate(qty,bid){
+  let need=qty;const alloc=[];
+  for(const b of batchesFifo()){
+    if(need<=1e-9)break;if(bid&&b.id!==bid)continue;if(b.remaining<=0)continue;
+    const take=Math.min(b.remaining,need);b.remaining=r3(b.remaining-take);need=r3(need-take);
+    alloc.push({bid:b.id,kg:take,cost:b.cost});
+  }
+  return alloc;
+}
+function pushSale(c,qty,price,paid,method,notes,category,alloc,extra){
+  const total=Math.round(qty*price),cogs=Math.round(sum(alloc,a=>a.kg*a.cost));
+  const s=Object.assign({id:uid(),ts:Date.now(),date:today(),custId:c.id,custName:c.name,category,qty,price,total,paid:Math.min(Math.max(paid,0),total),method,notes,alloc,cogs,u:Date.now()},extra||{});
+  S.sales.push(s);return s;
+}
+
+/* ================= preorders ================= */
+const preTotal=p=>Math.round(p.qty*(p.price||0));
+const isStockPre=p=>(p.product||'هەنگوین')==='هەنگوین';   // only plain honey is checked against the honey stock
+const daysLeft=d=>d?Math.round((new Date(d+'T00:00:00').getTime()-new Date(today()+'T00:00:00').getTime())/864e5):null;
+function preDue(p){
+  const l=daysLeft(p.expected);
+  if(l===null)return '';
+  return l<0?`<b class="red">${-l} ڕۆژ دواکەوتووە</b>`:l===0?'<b class="amber">ئەمڕۆ</b>':`${l} ڕۆژی ماوە`;
+}
+const PRE_ST={done:['تەسلیم کرا','paid'],cancelled:['هەڵوەشایەوە','debt']};
+function viewPre(){
+  const key=p=>p.expected||'9999-99-99';
+  const open=S.preorders.filter(p=>p.status==='open').sort((a,b)=>key(a)<key(b)?-1:key(a)>key(b)?1:a.ts-b.ts);
+  const closed=S.preorders.filter(p=>p.status!=='open').sort((a,b)=>b.ts-a.ts).slice(0,10);
+  const need=sum(open,p=>p.qty),st=stockTotal(),dep=sum(open,p=>p.deposit||0),short=Math.max(0,r3(sum(open.filter(isStockPre),p=>p.qty)-st));
+  const card=p=>{
+    const c=custOf(p.custId),tot=preTotal(p),sp=isStockPre(p),ready=sp&&st>=p.qty-1e-9,wa=c?waNumber(c.phone):'';
+    const msg=encodeURIComponent(`سڵاو ${p.custName}، هەنگوینی پێشوەختەکەت ئامادەیە 🍯`);
+    return `<div class="card"><div class="item"><div><b>${esc(p.custName)}</b><div class="mut" style="font-size:12.5px">${esc(p.product)}</div></div>
+    <span class="badge ${sp?(ready?'paid':'debt'):'part'}">${sp?(ready?'لە کۆگا هەیە':'کەمە '+kg(p.qty-st)):'بەرهەمی نوێ'}</span></div>
+    <div style="margin-top:8px">${kg(p.qty)}${p.price?` × ${money(p.price)} = <b class="amber">${money(tot)}</b>`:' · <span class="mut">نرخ دیاری نەکراوە</span>'}</div>
+    ${p.deposit?`<div class="green" style="margin-top:4px">دەستپێشخەری: ${money(p.deposit)}${tot?` · ماوە: ${money(Math.max(0,tot-p.deposit))}`:''}</div>`:''}
+    ${p.expected?`<div class="mut" style="margin-top:4px">📅 ${esc(p.expected)} · ${preDue(p)}</div>`:''}
+    ${p.notes?`<div class="mut" style="margin-top:4px;font-size:13px">📝 ${esc(p.notes)}</div>`:''}
+    <div class="acts"><button class="btn sm" data-act="preconv" data-id="${p.id}">✅ تەسلیمکردن / فرۆشتن</button>
+    <button class="btn ghost sm" data-act="editpre" data-id="${p.id}">✏️ دەستکاری</button>
+    ${wa&&(ready||!sp)?`<a class="btn ghost sm" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${msg}">💬 ئاگادارکردنەوە</a>`:''}
+    <button class="btn sm danger" data-act="precancel" data-id="${p.id}">هەڵوەشاندنەوە</button></div></div>`;
+  };
+  return `<h2>پێشوەختە</h2><p class="sub">ئەو کڕیارانەی هەنگوین یان بەرهەمی نوێیان داوا کردووە و هێشتا نەگەیشتووە</p>
+  <button class="btn block" data-act="newpre" style="margin-bottom:12px">➕ پێشوەختەی نوێ</button>
+  ${open.length?`<div class="grid2" style="margin-bottom:12px">
+    <div class="stat"><small>چاوەڕوان</small><b>${open.length}</b></div>
+    <div class="stat c-blue"><small>کۆی بڕی داواکراو</small><b>${kg(need)}</b></div>
+    <div class="stat ${short>0?'c-red':'c-green'}"><small>کەمی کۆگا بۆیان</small><b class="${short>0?'red':'green'}">${short>0?kg(short):'کۆگا بەسە'}</b></div>
+    <div class="stat c-green"><small>دەستپێشخەری وەرگیراو</small><b>${money(dep)}</b></div></div>`:''}
+  ${open.length?open.map(card).join(''):'<div class="empty">هیچ پێشوەختەیەک نییە</div>'}
+  ${closed.length?`<h3 style="margin-top:18px">دواین پێشوەختەکان (تەواو بوون)</h3><div class="card">${closed.map(p=>`<div class="line"><span>${esc(p.custName)} · ${esc(p.product)} · ${kg(p.qty)}</span><span class="badge ${PRE_ST[p.status][1]}">${PRE_ST[p.status][0]}</span></div>`).join('')}</div>`:''}`;
+}
+function preDashCard(){
+  const open=S.preorders.filter(p=>p.status==='open');if(!open.length)return '';
+  const need=sum(open,p=>p.qty),short=Math.max(0,r3(sum(open.filter(isStockPre),p=>p.qty)-stockTotal())),dep=sum(open,p=>p.deposit||0);
+  const next=open.filter(p=>p.expected).sort((a,b)=>a.expected<b.expected?-1:1)[0];
+  return `<div class="card" style="margin-top:12px"><h3>📝 پێشوەختەکان</h3>
+  <div class="line"><span>چاوەڕوان</span><b>${open.length} داواکاری · ${kg(need)}</b></div>
+  <div class="line"><span>کەمی کۆگا بۆیان</span><b class="${short>0?'red':'green'}">${short>0?kg(short):'کۆگا بەسە'}</b></div>
+  <div class="line"><span>دەستپێشخەری وەرگیراو</span><b class="green">${money(dep)}</b></div>
+  ${next?`<div class="line"><span>نزیکترین: ${esc(next.custName)}</span><b>${esc(next.expected)}</b></div>`:''}
+  <button class="btn ghost block" style="margin-top:10px" data-act="tab" data-tab="pre">بینینی هەموو</button></div>`;
+}
+function preModal(id,pf){
+  const p=id?S.preorders.find(x=>x.id===id):null,v=p||pf||{};
+  const phone=v.phone||((custOf(v.custId)||{}).phone)||'';
+  openModal(`<h2>${p?'دەستکاری پێشوەختە':'پێشوەختەی نوێ'}</h2>
+  <label>ناوی کڕیار *</label><input id="pName" list="custlist2" value="${esc(v.custName||'')}"><datalist id="custlist2">${S.customers.map(c=>`<option value="${esc(c.name)}">`).join('')}</datalist>
+  <div class="row"><div><label>مۆبایل</label><input id="pPhone" class="num" inputmode="tel" value="${esc(phone)}"></div>
+  <div><label>جۆری کڕیار</label><select id="pCat">${Object.entries(CATS).map(([k,l])=>`<option value="${k}"${(v.category||'general')===k?' selected':''}>${l}</option>`).join('')}</select></div></div>
+  <label>چی داوا دەکات؟ (هەنگوین یان بەرهەمێکی نوێ)</label><input id="pProd" value="${esc(v.product||'هەنگوین')}">
+  <div class="row"><div><label>بڕ (kg) *</label><input id="pQty" class="num" inputmode="decimal" value="${v.qty||''}"></div>
+  <div><label>نرخی ١ کیلۆ</label><input id="pPrice" class="num" inputmode="numeric" value="${v.price||''}"></div></div>
+  <div class="row"><div><label>دەستپێشخەری (ئەگەر دا)</label><input id="pDep" class="num" inputmode="numeric" value="${v.deposit||''}"></div>
+  <div><label>شێوازی پارەدان</label><select id="pMethod">${Object.entries(METHODS).map(([k,l])=>`<option value="${k}"${v.method===k?' selected':''}>${l}</option>`).join('')}</select></div></div>
+  <label>کەی ئامادە دەبێت؟</label><input id="pDate" type="date" class="num" value="${esc(v.expected||'')}">
+  <label>تێبینی</label><textarea id="pNotes" rows="2">${esc(v.notes||'')}</textarea>
+  <div class="row" style="margin-top:14px"><button class="btn ghost" data-act="close">داخستن</button><button class="btn" data-act="savepre" data-id="${p?p.id:''}">پاشەکەوتکردن</button></div>`);
+}
+let convId=null;
+function preConvCalc(){
+  const p=S.preorders.find(x=>x.id===convId);if(!p)return null;
+  const qty=r3(num($('#pcQty').value)),price=num($('#pcPrice').value),total=Math.round(qty*price),dep=p.deposit||0;
+  const raw=$('#pcExtra').value.trim();
+  const extra=raw===''?Math.max(0,total-dep):Math.max(0,num(raw));
+  const paid=Math.min(total,dep+extra);
+  return {p,qty,price,total,dep,extra,paid,owed:total-paid};
+}
+function preConvAvail(){const bid=$('#pcBatch').value;return bid?((S.batches.find(b=>b.id===bid)||{}).remaining||0):stockTotal();}
+function preConvUpd(){
+  const x=preConvCalc();if(!x)return;
+  $('#pcTotal').textContent=money(x.total);
+  const oe=$('#pcOwed');oe.textContent=money(x.owed);oe.className=x.owed>0.5?'red':'green';
+  let h='';
+  if(x.qty>preConvAvail()+1e-9)h+=`<b class="red">⚠️ بڕی بەردەست تەنها ${kg(preConvAvail())}ـە</b> `;
+  if(x.total>0&&x.dep>x.total)h+=`<b class="red">دەستپێشخەری لە کۆی گشتی زیاترە</b>`;
+  $('#pcHint').innerHTML=h;
+}
+function preConvModal(id){
+  const p=S.preorders.find(x=>x.id===id);if(!p)return;
+  convId=id;
+  const fb=firstBatch(),price=p.price||(fb?fb.sell:S.settings.defPrice);
+  openModal(`<h2>تەسلیمکردن: ${esc(p.custName)}</h2><p class="sub">${esc(p.product)} · دەستپێشخەری: <b class="green">${money(p.deposit||0)}</b></p>
+  <form id="pcForm" autocomplete="off">
+  <div class="row"><div><label>بڕی تەسلیمکراو (kg)</label><input id="pcQty" class="num" inputmode="decimal" value="${p.qty}"></div>
+  <div><label>نرخی ١ کیلۆ</label><input id="pcPrice" class="num" inputmode="numeric" value="${price}"></div></div>
+  <label>لە کام وەجبە؟</label>
+  <select id="pcBatch"><option value="">خۆکار (کۆنترین وەجبە)</option>${batchesFifo().filter(b=>b.remaining>0).map(b=>`<option value="${b.id}">${esc(b.name)} · ${kg(b.remaining)}</option>`).join('')}</select>
+  <div class="totbox"><div><span>کۆی گشتی</span><span class="big" id="pcTotal"></span></div></div>
+  <label>ئێستا چەندی دەدات؟ (جگە لە دەستپێشخەری)</label><input id="pcExtra" class="num" inputmode="numeric">
+  <div class="hint">بەتاڵ = ماوەی پارەکە هەمووی</div>
+  <div class="totbox"><div><span>قەرزی ماوە</span><b id="pcOwed"></b></div></div>
+  <label>شێوازی پارەدان</label><select id="pcMethod">${Object.entries(METHODS).map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select>
+  <div class="hint" id="pcHint"></div>
+  <div class="row" style="margin-top:14px"><button type="button" class="btn ghost" data-act="close">داخستن</button><button type="button" class="btn" data-act="preconfirm">✅ تۆمارکردنی فرۆشتن</button></div></form>`);
+  preConvUpd();
+}
+
+function viewHist(){
+  return `<h2>مێژووی فرۆشتنەکان</h2><p class="sub">هەموو فرۆشتنەکان و قەرزەکان</p>
+  <input id="hq" placeholder="گەڕان بەپێی ناو یان ژمارە..." value="${esc(hist.q)}">
+  <div class="row" style="margin-top:8px;margin-bottom:12px">
+    <select id="hcat"><option value="ALL">هەموو جۆرەکان</option>${Object.entries(CATS).map(([k,v])=>`<option value="${k}"${hist.cat===k?' selected':''}>${v}</option>`).join('')}</select>
+    <select id="hst"><option value="ALL">هەموو دۆخەکان</option><option value="DEBT"${hist.st==='DEBT'?' selected':''}>تەنها قەرز</option></select>
+  </div><div id="histList"></div>`;
+}
+function renderHistList(){
+  const q=hist.q.trim().toLowerCase();
+  const list=S.sales.slice().sort((a,b)=>b.ts-a.ts).filter(s=>{
+    const c=custOf(s.custId);
+    const okQ=!q||(s.custName||'').toLowerCase().includes(q)||(c&&(c.phone||'').includes(q));
+    return okQ&&(hist.cat==='ALL'||s.category===hist.cat)&&(hist.st==='ALL'||saleOwed(s)>0.5);
+  });
+  $('#histList').innerHTML=list.length?list.map(s=>{
+    const [sl,sc]=saleStatus(s),o=saleOwed(s);
+    return `<div class="card"><div class="item"><div><b>${esc(s.custName)}</b><div class="mut" style="font-size:12.5px">${esc(s.date)} · ${timeOf(s.ts)}</div></div><span class="badge ${sc}">${sl}</span></div>
+    <div style="margin-top:8px">${kg(s.qty)} × ${money(s.price)} = <b class="amber">${money(s.total)}</b></div>
+    <div style="margin-top:6px"><span class="badge">${esc(catName(s.category))}</span> <span class="badge">${esc(METHODS[s.method]||s.method||'')}</span>${s.fromPre?' <span class="badge">پێشوەختە</span>':''}</div>
+    ${o>0.5?`<div class="red" style="margin-top:6px">قەرزی ماوە: ${money(o)}</div>`:''}
+    ${s.notes?`<div class="mut" style="margin-top:6px;font-size:13px">📝 ${esc(s.notes)}</div>`:''}
+    <div class="acts">${o>0.5?`<button class="btn sm" data-act="paysale" data-id="${s.id}">💰 پارەدان</button>`:''}<button class="btn sm danger" data-act="delsale" data-id="${s.id}">سڕینەوە</button></div></div>`;
+  }).join(''):`<div class="empty">هیچ فرۆشتنێک نەدۆزرایەوە</div>`;
+}
+
+function viewStock(){
+  const rows=S.batches.length?S.batches.slice().reverse().map(b=>{
+    const pct=b.qty>0?Math.round(b.remaining/b.qty*100):0;
+    return `<div class="card"><div class="item"><div><b>${esc(b.name)}</b><div class="mut" style="font-size:12.5px">${esc(b.date||'')}</div></div><b class="${b.remaining<=S.settings.low?'red':'green'}">${kg(b.remaining)}</b></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div class="mut" style="font-size:13px;margin-top:6px">لە ${kg(b.qty)} · تێچووی ١ کیلۆ: ${money(b.cost)} · فرۆشتنی ١ کیلۆ: ${money(b.sell)}</div>
+    <div class="acts"><button class="btn sm danger" data-act="delbatch" data-id="${b.id}">سڕینەوە</button></div></div>`;
+  }).join(''):`<div class="empty">کۆگا بەتاڵە. وەجبەی یەکەم زیاد بکە.</div>`;
+  return `<h2>بەڕێوەبردنی کۆگا</h2><p class="sub">کۆی هەنگوینی بەردەست: <b class="green">${kg(stockTotal())}</b></p>
+  <form id="batchForm" class="card"><h3>زیادکردنی وەجبەی نوێ</h3>
+    <label>ناوی وەجبە / سەرچاوە</label><input id="bName" required placeholder="هەنگوینی چیای پێنجوێن - وەجبەی ١">
+    <div class="row"><div><label>بڕ (kg)</label><input id="bQty" class="num" inputmode="decimal" placeholder="30"></div>
+    <div><label>تێچووی ١ کیلۆ</label><input id="bCost" class="num" inputmode="numeric" placeholder="25000"></div></div>
+    <label>نرخی فرۆشتنی ١ کیلۆ</label><input id="bSell" class="num" inputmode="numeric" placeholder="40000">
+    <button type="submit" class="btn block" style="margin-top:14px">➕ زیادکردن بۆ کۆگا</button>
+  </form>${rows}`;
+}
+function submitBatch(){
+  const name=$('#bName').value.trim(),qty=r3(num($('#bQty').value)),cost=num($('#bCost').value),sell=num($('#bSell').value);
+  if(!name)return toast('ناوی وەجبە بنووسە');
+  if(qty<=0)return toast('بڕ بنووسە');
+  if(sell<=0)return toast('نرخی فرۆشتن بنووسە');
+  S.batches.push({id:uid(),name,qty,remaining:qty,cost,sell,date:today(),u:Date.now()});
+  save();render();toast('وەجبەکە زیادکرا');
+}
+
+function viewCust(){
+  const debts=sum(Object.values(D.bal),x=>x);
+  return `<h2>کڕیاران</h2><p class="sub">${S.customers.length} کڕیار · قەرزی گشتی: <b class="${debts>0.5?'red':'green'}">${money(debts)}</b></p>
+  <input id="cq" placeholder="گەڕان بەپێی ناو یان ژمارە..." value="${esc(custQ)}" style="margin-bottom:12px"><div id="custList"></div>`;
+}
+function renderCustList(){
+  const q=custQ.trim().toLowerCase();
+  const list=S.customers.filter(c=>!q||c.name.toLowerCase().includes(q)||(c.phone||'').includes(q))
+    .sort((a,b)=>(bal(b.id)-bal(a.id))||((info(b.id).last>info(a.id).last)?1:-1));
+  $('#custList').innerHTML=list.length?list.map(c=>{
+    const i=info(c.id),b=bal(c.id);
+    return `<button class="card" style="display:block;width:100%;text-align:start" data-act="cust" data-id="${c.id}">
+    <div class="item"><b>${esc(c.name)}</b>${b>0.5?`<span class="badge debt">قەرز ${money(b)}</span>`:'<span class="badge paid">بێ قەرز</span>'}</div>
+    <div style="margin-top:4px"><span class="badge">${esc(catName(c.category))}</span> <span class="mut num" style="display:inline-block">${esc(c.phone||'')}</span></div>
+    <div class="mut" style="font-size:13px;margin-top:6px">${kg(i.kg)} · ${money(i.spent)} · دوایین: ${esc(i.last||'—')}</div>
+    ${i.notes.length?`<div class="mut" style="font-size:12.5px;margin-top:4px">📝 ${esc(i.notes[i.notes.length-1])}</div>`:''}</button>`;
+  }).join(''):`<div class="empty">هیچ کڕیارێک نییە</div>`;
+}
+function waNumber(p){const d=String(p||'').replace(/\D/g,'');if(!d)return '';if(d.startsWith('964'))return d;if(d.startsWith('0'))return '964'+d.slice(1);return d;}
+function custModal(id,defAmt){
+  derive();
+  const c=custOf(id);if(!c)return;
+  const b=bal(id),i=info(id);
+  const ev=[].concat(
+    S.sales.filter(s=>s.custId===id).map(s=>({ts:s.ts,k:'s',s})),
+    S.payments.filter(p=>p.custId===id).map(p=>({ts:p.ts,k:'p',p}))
+  ).sort((x,y)=>y.ts-x.ts).slice(0,20);
+  const wa=waNumber(c.phone);
+  const msg=encodeURIComponent(`سڵاو ${c.name}، بڕی ${nf0.format(b)} دینار قەرزی هەنگوینت ماوە. سوپاس 🍯`);
+  openModal(`<h2>${esc(c.name)}</h2>
+  <div class="grid2" style="margin:10px 0"><div class="stat"><small>قەرزی ماوە</small><b class="${b>0.5?'red':'green'}">${money(b)}</b></div><div class="stat c-blue"><small>کۆی کڕین</small><b>${kg(i.kg)}</b><em>${money(i.spent)}</em></div></div>
+  ${b>0.5?`<div class="card"><h3>تۆمارکردنی پارەدانەوە</h3>
+    <div class="row"><input id="cpAmt" class="num" inputmode="numeric" value="${defAmt!=null?Math.round(defAmt):Math.round(b)}">
+    <select id="cpMethod">${Object.entries(METHODS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+    <button class="btn block" style="margin-top:10px" data-act="addpay" data-id="${id}">💰 تۆمارکردنی پارەدان</button></div>`:''}
+  <div class="acts" style="margin:0 0 12px">${c.phone?`<a class="btn ghost sm" href="tel:${esc(c.phone)}">📞 پەیوەندی</a>`:''}${wa&&b>0.5?`<a class="btn ghost sm" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${msg}">💬 بیرخستنەوە لە WhatsApp</a>`:''}</div>
+  <label>ناو</label><input id="ceName" value="${esc(c.name)}">
+  <div class="row"><div><label>مۆبایل</label><input id="cePhone" class="num" inputmode="tel" value="${esc(c.phone||'')}"></div>
+  <div><label>جۆر</label><select id="ceCat">${Object.entries(CATS).map(([k,v])=>`<option value="${k}"${c.category===k?' selected':''}>${v}</option>`).join('')}</select></div></div>
+  <div class="row" style="margin-top:12px"><button class="btn ghost" data-act="close">داخستن</button><button class="btn" data-act="savecust" data-id="${id}">پاشەکەوتکردن</button></div>
+  <h3 style="margin-top:18px">مێژوو</h3>`+
+  (ev.length?ev.map(e=>e.k==='s'?`<div class="line"><span>🛒 ${esc(e.s.date)} · ${kg(e.s.qty)}</span><b>${money(e.s.total)}</b></div>`:`<div class="line"><span>💰 ${esc(e.p.date)} · پارەدان</span><b class="green">${money(e.p.amount)}</b></div>`).join(''):`<div class="mut">هیچ نییە</div>`)+
+  (!S.sales.some(s=>s.custId===id)&&!S.payments.some(p=>p.custId===id)&&!S.preorders.some(p=>p.custId===id)?`<button class="btn danger block" style="margin-top:14px" data-act="delcust" data-id="${id}">سڕینەوەی کڕیار</button>`:''));
+}
+
+function viewSet(){
+  const s=S.settings;
+  return `<h2>ڕێکخستن و داتا</h2><p class="sub">backup، گەڕاندنەوە و ڕێکخستنەکان</p>
+  <div class="card"><h3>ڕێکخستن</h3>
+    <label>ئاگاداری کەمبوونەوەی کۆگا (kg)</label><input id="setLow" class="num" inputmode="decimal" value="${s.low}">
+    <label>نرخی بنەڕەتی ١ کیلۆ (کاتێک کۆگا بەتاڵە)</label><input id="setPrice" class="num" inputmode="numeric" value="${s.defPrice}"></div>
+  <div class="card"><h3>Backup و گەڕاندنەوە</h3>
+    <p class="sub">داتاکان تەنها لەسەر ئەم مۆبایلەن. بە بەردەوامی backup بگرە و بینێرە بۆ Telegram یان Google Drive. دوایین backup: <b>${s.lastBackup?new Date(s.lastBackup).toLocaleString('en-GB'):'هەرگیز'}</b></p>
+    <button class="btn block" data-act="export">⬇️ هەناردەکردنی backup (JSON)</button>
+    <label class="btn ghost block" for="impFile" style="margin-top:10px">⬆️ گەڕاندنەوە لە backup</label>
+    <input type="file" id="impFile" accept=".json,application/json" hidden>
+    <button class="btn ghost block" style="margin-top:10px" data-act="csv">📄 فرۆشتنەکان وەک CSV</button></div>
+  ${syncCard()}
+  <div class="card"><h3>دامەزراندن</h3><p class="sub" style="margin:0">لە مینیوی وێبگەڕ هەڵبژێرە «Add to Home Screen» تا وەک ئەپ بێت و بەبێ ئینتەرنێت کار بکات.</p></div>
+  <div class="card" style="border-color:#7f1d2d"><h3 class="red">مەترسی</h3><p class="sub">هەموو فرۆشتن، کۆگا و کڕیارەکان دەسڕێتەوە. پێشتر backup بگرە.</p>
+    <button class="btn danger block" data-act="wipe">سڕینەوەی هەموو داتا</button></div>`;
+}
+
+/* ================= render ================= */
+function render(){
+  pending=false;
+  derive();
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+  const np=S.preorders.filter(p=>p.status==='open').length;
+  $('#navPreLbl').textContent='پێشوەختە'+(np?' ('+np+')':'');
+  const views={dash:viewDash,sale:viewSale,pre:viewPre,hist:viewHist,stock:viewStock,cust:viewCust,set:viewSet};
+  $('#main').innerHTML=banners()+views[tab]();
+  if(tab==='sale'){$('#sPrice').value=defPrice();saleUpd();}
+  if(tab==='hist')renderHistList();
+  if(tab==='cust')renderCustList();
+}
+
+/* ================= backup ================= */
+async function exportBackup(){
+  const json=JSON.stringify(S),name='honey-backup-'+today()+'.json';
+  let file=null;try{file=new File([json],name,{type:'application/json'});}catch(e){}
+  try{
+    if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:name});
+      S.settings.lastBackup=Date.now();await save(false);render();return;
+    }
+  }catch(e){if(e&&e.name==='AbortError')return;}
+  downloadBlob(file||new Blob([json],{type:'application/json'}),name);
+  S.settings.lastBackup=Date.now();await save(false);render();
+}
+function downloadBlob(blob,name){
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+}
+async function importBackup(file){
+  if(!file)return;
+  try{
+    const d=JSON.parse(await file.text());
+    if(!d||!Array.isArray(d.batches)||!Array.isArray(d.sales))throw new Error('bad');
+    if(!confirm('داتای ئێستا دەگۆڕدرێت بە backup. دڵنیایت؟'))return;
+    S=normalize(d);const now=Date.now();S.tomb=[];S.sync={since:0,sent:{}};
+    Object.keys(ARR).forEach(type=>S[ARR[type]].forEach(r=>{r.u=now;}));
+    await save();render();toast('backup گەڕایەوە');
+  }catch(e){toast('فایلی backup دروست نییە');}
+}
+function csvCell(v){v=String(v==null?'':v);if(/^[=+\-@]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"';}
+function exportCSV(){
+  if(!S.sales.length)return toast('هیچ فرۆشتنێک نییە');
+  const head=['Date','Customer','Phone','Category','Kg','Price per kg','Total','Cost','Paid at sale','Still owed','Method','Notes'];
+  const rows=S.sales.slice().sort((a,b)=>a.ts-b.ts).map(s=>{const c=custOf(s.custId);return [s.date,s.custName,c?c.phone:'',catName(s.category),s.qty,s.price,s.total,s.cogs||0,s.paid,saleOwed(s),METHODS[s.method]||s.method,s.notes].map(csvCell).join(',');});
+  downloadBlob(new Blob(['﻿'+head.join(',')+'\n'+rows.join('\n')],{type:'text/csv;charset=utf-8'}),'sales-'+today()+'.csv');
+}
+
+/* ================= actions ================= */
+const A={
+  tab(el){tab=el.dataset.tab;closeModal();render();window.scrollTo(0,0);},
+  period(el){period=el.dataset.p;render();},
+  qty(el){$('#sQty').value=el.dataset.v;saleUpd();},
+  paidall(){$('#sPaid').value='';saleUpd();},
+  paidnone(){$('#sPaid').value='0';saleUpd();},
+  close(){closeModal();},
+  cust(el){custModal(el.dataset.id);},
+  paysale(el){const s=S.sales.find(x=>x.id===el.dataset.id);if(s)custModal(s.custId,saleOwed(s));},
+  addpay(el){
+    const id=el.dataset.id,amt=Math.round(num($('#cpAmt').value));
+    if(amt<=0)return toast('بڕی پارەدان بنووسە');
+    if(amt>bal(id)+0.5)return toast('زیاترە لە قەرزی ماوە ('+money(bal(id))+')');
+    S.payments.push({id:uid(),ts:Date.now(),date:today(),custId:id,amount:amt,method:$('#cpMethod').value,u:Date.now()});
+    save();derive();custModal(id);render();toast('پارەدانەکە تۆمارکرا');
+  },
+  savecust(el){
+    const id=el.dataset.id,c=custOf(id),name=$('#ceName').value.trim();
+    if(!name)return toast('ناو پێویستە');
+    if(S.customers.some(x=>x.id!==id&&x.name.trim().toLowerCase()===name.toLowerCase()))return toast('ئەم ناوە پێشتر هەیە');
+    c.name=name;c.phone=$('#cePhone').value.trim();c.category=$('#ceCat').value;c.u=Date.now();
+    S.sales.forEach(s=>{if(s.custId===id&&s.custName!==name){s.custName=name;s.u=Date.now();}});
+    closeModal();save();render();toast('پاشەکەوت کرا');
+  },
+  delcust(el){if(!confirm('دڵنیایت؟'))return;const dc=custOf(el.dataset.id);if(dc)tomb('customer',dc);S.customers=S.customers.filter(c=>c.id!==el.dataset.id);closeModal();save();render();},
+  delsale(el){
+    const s=S.sales.find(x=>x.id===el.dataset.id);if(!s)return;
+    if(!confirm('ئەم فرۆشتنە دەسڕدرێتەوە و کیلۆکان دەگەڕێنەوە بۆ کۆگا. دڵنیایت؟'))return;
+    if(s.fromPre){const p=S.preorders.find(x=>x.id===s.fromPre);if(p){p.status='open';p.saleId=null;p.u=Date.now();}}
+    tomb('sale',s);
+    S.sales=S.sales.filter(x=>x!==s);save();render();toast('سڕایەوە و کۆگا گەڕایەوە');
+  },
+  delbatch(el){
+    const b=S.batches.find(x=>x.id===el.dataset.id);if(!b)return;
+    if(S.sales.some(s=>(s.alloc||[]).some(a=>a.bid===b.id)))return toast('ئەم وەجبەیە فرۆشتنی لەسەرە و ناسڕدرێتەوە');
+    if(!confirm('وەجبەکە دەسڕدرێتەوە. دڵنیایت؟'))return;
+    tomb('batch',b);
+    S.batches=S.batches.filter(x=>x!==b);save();render();
+  },
+  export(){exportBackup();},
+  csv(){exportCSV();},
+  wipe(){
+    if(!confirm('هەموو داتاکان دەسڕدرێنەوە'+(cfg?' (لە هەموو ئامێرەکانیش)':'')+'! دڵنیایت؟'))return;
+    if(!confirm('دووبارە دڵنیابە: ناتوانرێت بگەڕێنرێتەوە مەگەر backup ـت هەبێت.'))return;
+    Object.keys(ARR).forEach(type=>{S[ARR[type]].forEach(r=>tomb(type,r));S[ARR[type]]=[];});
+    save();tab='dash';render();toast('هەموو داتا سڕایەوە');
+  },
+  newpre(){preModal(null);},
+  editpre(el){preModal(el.dataset.id);},
+  topre(){preModal(null,{custName:$('#sName').value.trim(),phone:$('#sPhone').value.trim(),category:$('#sCat').value,qty:num($('#sQty').value)||'',price:num($('#sPrice').value)||''});},
+  savepre(el){
+    const id=el.dataset.id,name=$('#pName').value.trim();
+    if(!name)return toast('ناوی کڕیار بنووسە');
+    const qty=r3(num($('#pQty').value));if(qty<=0)return toast('بڕی کیلۆ بنووسە');
+    const price=Math.max(0,num($('#pPrice').value)),dep=Math.max(0,Math.round(num($('#pDep').value)));
+    if(price>0&&dep>Math.round(qty*price))return toast('دەستپێشخەری لە کۆی گشتی زیاترە');
+    const cat=$('#pCat').value,c=ensureCustomer(name,$('#pPhone').value.trim(),cat);
+    const data={custId:c.id,custName:c.name,category:cat,product:$('#pProd').value.trim()||'هەنگوین',qty,price,deposit:dep,method:$('#pMethod').value,expected:$('#pDate').value||'',notes:$('#pNotes').value.trim(),u:Date.now()};
+    if(id){const p=S.preorders.find(x=>x.id===id);if(p)Object.assign(p,data);}
+    else S.preorders.push(Object.assign({id:uid(),ts:Date.now(),date:today(),status:'open',saleId:null},data));
+    closeModal();save();render();toast('پێشوەختە تۆمارکرا');
+  },
+  precancel(el){
+    const p=S.preorders.find(x=>x.id===el.dataset.id);if(!p)return;
+    if(!confirm('پێشوەختەکە هەڵدەوەشێتەوە.'+(p.deposit?` دەستپێشخەری (${money(p.deposit)}) دەبێت بگەڕێنرێتەوە بۆ کڕیار.`:'')+' دڵنیایت؟'))return;
+    p.status='cancelled';p.u=Date.now();save();render();
+  },
+  preconv(el){preConvModal(el.dataset.id);},
+  preconfirm(){
+    const x=preConvCalc();if(!x)return;
+    if(x.qty<=0)return toast('بڕی کیلۆ بنووسە');
+    if(x.price<=0)return toast('نرخی کیلۆ بنووسە');
+    if(x.qty>preConvAvail()+1e-9)return toast('کۆگا بەس نییە: تەنها '+kg(preConvAvail()));
+    const bid=$('#pcBatch').value||null,p=x.p;
+    const c=custOf(p.custId)||ensureCustomer(p.custName,'',p.category);
+    const alloc=allocate(x.qty,bid);
+    const notes=[p.product!=='هەنگوین'?p.product:'',p.notes].filter(Boolean).join(' · ');
+    const s=pushSale(c,x.qty,x.price,x.paid,x.extra>0?$('#pcMethod').value:(p.method||'cash'),notes,p.category,alloc,{fromPre:p.id});
+    p.status='done';p.saleId=s.id;p.u=Date.now();
+    closeModal();save();render();
+    toast(x.owed>0.5?'تۆمارکرا · قەرز: '+money(x.owed):'پێشوەختە تەسلیم کرا');
+  },
+  syncbtn(){if(!cfg){tab='set';render();}else syncNow();},
+  syncnow(){syncNow();},
+  syncsave(){
+    const url=$('#syUrl').value.trim(),token=$('#syTok').value.trim();
+    if(!/^https:\/\//.test(url)||!token)return toast('URL و Token بنووسە');
+    saveCfg({url,token});S.sync={since:0,sent:{}};save(false,false);render();syncNow();
+  },
+  syncoff(){if(!confirm('پەیوەندی sync دەپچڕێت لەسەر ئەم ئامێرە. داتاکان نامێنن؟ نا — داتاکان دەمێننەوە.'))return;saveCfg(null);setSync('off');render();},
+  synccopy(){
+    if(!cfg)return;
+    const link=location.origin+location.pathname+'#cfg='+encodeURIComponent(btoa(JSON.stringify({u:cfg.url,t:cfg.token})));
+    const done=()=>toast('لینک کۆپی کرا. تەنها بۆ خۆت بینێرە');
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(link).then(done,()=>prompt('لینکەکە کۆپی بکە:',link));
+    else prompt('لینکەکە کۆپی بکە:',link);
+  }
+};
+document.addEventListener('click',e=>{
+  if(e.target.id==='modal'){closeModal();return;}
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const f=A[el.dataset.act];if(f)f(el);
+});
+document.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(e.target.id==='saleForm')submitSale();
+  if(e.target.id==='batchForm')submitBatch();
+});
+document.addEventListener('input',e=>{
+  const t=e.target,id=t.id;
+  if(t.closest&&t.closest('#saleForm')){saleUpd();if(id==='sName')saleNameHint();}
+  if(t.closest&&t.closest('#pcForm'))preConvUpd();
+  if(id==='hq'){hist.q=t.value;renderHistList();}
+  if(id==='cq'){custQ=t.value;renderCustList();}
+});
+document.addEventListener('change',e=>{
+  const t=e.target,id=t.id;
+  if(id==='sName')saleNameHint();
+  if(id==='hcat'){hist.cat=t.value;renderHistList();}
+  if(id==='hst'){hist.st=t.value;renderHistList();}
+  if(id==='setLow'){S.settings.low=Math.max(0,num(t.value));save(false);toast('پاشەکەوت کرا');}
+  if(id==='setPrice'){S.settings.defPrice=Math.max(0,num(t.value));save(false);toast('پاشەکەوت کرا');}
+  if(id==='impFile'){importBackup(t.files[0]);t.value='';}
+});
+
+/* ================= sync (free Google Sheet through Apps Script) ================= */
+const ARR={batch:'batches',sale:'sales',customer:'customers',payment:'payments',preorder:'preorders'};
+const SYNC_TXT={off:'sync ناچالاکە',idle:'ئامادەیە',busy:'sync دەکرێت...',ok:'sync کرا ✔',err:'هەڵە لە پەیوەندی',offline:'ئینتەرنێت نییە'};
+let cfg=null,syncing=false,again=false,syncState='off',syncAt=0,syncMsg='',syncTimer=null,pending=false;
+function loadCfg(){try{cfg=JSON.parse(localStorage.getItem('honey_sync')||'null');}catch(e){cfg=null;}}
+function saveCfg(c){cfg=c;try{if(c)localStorage.setItem('honey_sync',JSON.stringify(c));else localStorage.removeItem('honey_sync');}catch(e){}}
+function parseHashCfg(){
+  const m=/[#&]cfg=([^&]+)/.exec(location.hash||'');if(!m)return;
+  try{const o=JSON.parse(atob(decodeURIComponent(m[1])));if(o&&o.u&&o.t&&/^https:\/\//.test(o.u))saveCfg({url:o.u,token:o.t});}catch(e){}
+  try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+}
+function tomb(type,rec){S.tomb=S.tomb.filter(t=>t.id!==rec.id);S.tomb.push({id:rec.id,type,u:Date.now()});}
+function statusLine(){return (SYNC_TXT[syncState]||'')+(syncAt&&syncState==='ok'?' · '+timeOf(syncAt):'')+(syncMsg&&syncState==='err'?' · '+syncMsg:'');}
+function setSync(st,at,msg){
+  syncState=st;if(at)syncAt=at;syncMsg=msg||'';
+  const b=$('#syncBtn');
+  if(b){b.textContent={off:'☁️',idle:'☁️',busy:'🔄',ok:'✅',err:'⚠️',offline:'📴'}[st]||'☁️';b.style.opacity=st==='off'?'.45':'1';b.title=statusLine();}
+  const s=$('#syStatus');if(s)s.textContent=statusLine();
+}
+function syncCard(){
+  if(!cfg)return `<div class="card"><h3>☁️ Sync لەنێوان ئامێرەکان</h3><p class="sub">بۆ ئەوەی فرۆشتن و قەرز و کۆگا لە هەموو مۆبایل و کۆمپیوتەرەکان وەک یەک بن. داتا لە Google Sheet ـی خۆتدا دەپارێزرێت و بێ پارەیە. ڕێنمایی لە README.md ـدایە.</p>
+   <label>Web App URL</label><input id="syUrl" class="num" placeholder="https://script.google.com/macros/s/.../exec">
+   <label>Token</label><input id="syTok" class="num">
+   <button class="btn block" style="margin-top:12px" data-act="syncsave">پەیوەندی کردن</button></div>`;
+  return `<div class="card"><h3>☁️ Sync لەنێوان ئامێرەکان</h3><p class="sub">دۆخ: <b id="syStatus">${esc(statusLine())}</b></p>
+   <button class="btn block" data-act="syncnow">🔄 Sync ئێستا</button>
+   <button class="btn ghost block" style="margin-top:10px" data-act="synccopy">🔗 کۆپیکردنی لینکی دامەزراندن بۆ ئامێری تر</button>
+   <button class="btn danger block" style="margin-top:10px" data-act="syncoff">پچڕاندنی sync لەسەر ئەم ئامێرە</button></div>`;
+}
+function collectChanges(){
+  const out=[],sent=S.sync.sent;
+  Object.keys(ARR).forEach(type=>S[ARR[type]].forEach(r=>{
+    if(!r.u)r.u=Date.now();
+    const s=sent[r.id];
+    if(s===undefined||r.u>s){const o=Object.assign({},r);delete o.remaining;out.push({id:r.id,type,u:r.u,deleted:0,data:o});}
+  }));
+  S.tomb.forEach(t=>{const s=sent[t.id];if(s===undefined||t.u>s)out.push({id:t.id,type:t.type,u:t.u,deleted:1,data:null});});
+  return out;
+}
+function applyRows(rows){
+  let ch=false;
+  rows.forEach(r=>{
+    const key=ARR[r.type];if(!key||!r.id)return;
+    const arr=S[key],i=arr.findIndex(x=>x.id===r.id),loc=i>=0?arr[i]:null,lu=loc?(loc.u||0):0;
+    if(r.deleted){
+      if(loc&&lu<=r.u){arr.splice(i,1);ch=true;}
+      if(!(loc&&lu>r.u)&&!S.tomb.some(t=>t.id===r.id))S.tomb.push({id:r.id,type:r.type,u:r.u});
+    }else if(r.data){
+      const t=S.tomb.find(x=>x.id===r.id);
+      if(!(t&&t.u>=r.u)){
+        if(t)S.tomb=S.tomb.filter(x=>x!==t);
+        r.data.u=r.u;
+        if(!loc){arr.push(r.data);ch=true;}
+        else if(lu<r.u){arr[i]=r.data;ch=true;}
+      }
+    }
+    S.sync.sent[r.id]=Math.max(S.sync.sent[r.id]||0,r.u);
+  });
+  return ch;
+}
+/* After merging several devices: one customer per name, and no sale/payment without a customer. */
+function repair(){
+  let ch=false;const now=Date.now(),by={};
+  S.customers.slice().sort((a,b)=>a.id<b.id?-1:1).forEach(c=>{
+    const k=c.name.trim().toLowerCase();
+    if(!by[k]){by[k]=c;return;}
+    const keep=by[k];
+    S.sales.forEach(s=>{if(s.custId===c.id){s.custId=keep.id;s.custName=keep.name;s.u=now;}});
+    S.payments.forEach(p=>{if(p.custId===c.id){p.custId=keep.id;p.u=now;}});
+    S.preorders.forEach(p=>{if(p.custId===c.id){p.custId=keep.id;p.custName=keep.name;p.u=now;}});
+    if(!keep.phone&&c.phone){keep.phone=c.phone;keep.u=now;}
+    tomb('customer',c);S.customers=S.customers.filter(x=>x!==c);ch=true;
+  });
+  const ids=new Set(S.customers.map(c=>c.id));
+  const need=(id,name,cat)=>{if(ids.has(id))return;S.customers.push({id,name:name||'؟',phone:'',category:cat||'general',u:now});S.tomb=S.tomb.filter(t=>t.id!==id);ids.add(id);ch=true;};
+  S.sales.forEach(s=>need(s.custId,s.custName,s.category));
+  S.payments.forEach(p=>need(p.custId,'؟','general'));
+  S.preorders.forEach(p=>need(p.custId,p.custName,p.category));
+  return ch;
+}
+function focusedInput(){const a=document.activeElement;return !!a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)&&$('#main').contains(a);}
+function softRender(){
+  derive();
+  if(tab==='sale'){saleUpd();const e=$('#sStock');if(e)e.textContent=kg(stockTotal());}
+  else if(tab==='set'){}
+  else if(focusedInput()||(tab==='stock'&&['#bName','#bQty','#bCost','#bSell'].some(s=>$(s)&&$(s).value))){pending=true;}
+  else render();
+}
+function scheduleSync(ms=1500){if(!cfg)return;clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,ms);}
+async function syncNow(){
+  if(!cfg||!cfg.url)return setSync('off');
+  if(syncing){again=true;return;}
+  syncing=true;setSync('busy');
+  try{
+    const changes=collectChanges();
+    const r=await fetch(cfg.url,{method:'POST',redirect:'follow',body:JSON.stringify({token:cfg.token,since:S.sync.since,changes})});
+    const j=await r.json();
+    if(j.error)throw new Error(j.error==='auth'?'Token هەڵەیە':j.error);
+    changes.forEach(c=>{S.sync.sent[c.id]=Math.max(S.sync.sent[c.id]||0,c.u);});
+    const changed=applyRows(j.rows||[]);
+    S.sync.since=j.stamp||S.sync.since;
+    const fixed=repair();
+    await save(changed||fixed,false);
+    setSync('ok',Date.now());
+    if(changed||fixed)softRender();
+    if(fixed)scheduleSync(300);
+  }catch(e){setSync(typeof navigator!=='undefined'&&navigator.onLine===false?'offline':'err',0,e.message);}
+  finally{syncing=false;if(again){again=false;scheduleSync(300);}}
+}
+function startTimers(){
+  setInterval(()=>{if(!document.hidden)syncNow();},30000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncNow();});
+  window.addEventListener('online',()=>syncNow());
+  document.addEventListener('focusout',()=>{if(!pending)return;setTimeout(()=>{if(pending&&!focusedInput()){pending=false;render();}},400);});
+}
+
+/* ================= start ================= */
+(async function init(){
+  await load();loadCfg();parseHashCfg();
+  render();setSync(cfg?'idle':'off');
+  if(cfg)syncNow();
+  startTimers();
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+  if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>
